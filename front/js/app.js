@@ -34,7 +34,7 @@ function showDiv( user, nickname){
 	//var div = document.querySelector('div');
 	var li = document.querySelectorAll('li');
 	for (var i = 0; i < li.length; i++) {
-		if (li[i].getAttribute("data-nickname") == id) {
+		if (li[i].getAttribute("data-nickname") == nickname) {
 			thisLi = li[i];
 			thisLi.addEventListener('click', function(e) {
 		    	e.stopPropagation();
@@ -74,7 +74,8 @@ document.addEventListener("DOMContentLoaded",function(){
 	var formDivElem = document.querySelector("div.form-group");
 	
 	$.ajax({
-		url: "http://localhost:8080/REST_users/users/getUsers",
+		url: "http://localhost:8080/users/",
+		//url: "http://localhost:8080/users/getUsers",
 		type: "GET",
 		dataType: "json"
 	})
@@ -84,9 +85,10 @@ document.addEventListener("DOMContentLoaded",function(){
     $(ul).on('click', function(e){
         if(e.target.classList == 'more') {	
             var parent = e.target.parentElement;
-            var id = parent.getAttribute("data-nickname");
+            var nickname = parent.getAttribute("data-nickname");
             $.ajax({
-        		url: "http://localhost:8080/REST_users/users/getUser/" + nickname,
+            	url: "http://localhost:8080/users/" + nickname,
+            	//url: "http://localhost:8080/users/getUser/" + nickname,
         		type: "GET",
         		dataType: "json"
         	})
@@ -94,17 +96,49 @@ document.addEventListener("DOMContentLoaded",function(){
             //$(ul).find('li').find('.more').off('click');
         } else if(e.target.classList == 'delete') {	
             var parent = e.target.parentElement;
-            var id = parent.getAttribute("data-nickname");
+            var nickname = parent.getAttribute("data-nickname");
             $.ajax({
-        		url: "http://localhost:8080/REST_users/users/deleteUser/" + nickname,
+            	url: "http://localhost:8080/users/" + nickname,
+            	//url: "http://localhost:8080/users/deleteUser/" + nickname,
         		type: "DELETE",
         		//dataType: "json"
         	})
-        	.done( function() { alert('DELETE completed'); } );
+        	.done( function() { alert('DELETE completed'); } )
+            .fail (function() { alert('DELETE failed'); } );
             //$(ul).find('li').find('btn').off('click');
         }
   
     })
+    
+    
+    /*var submit = document.querySelector('.btn');
+	$(submit).on('click', function(event) {
+		if(event.target.tagName=="BUTTON"){
+			event.preventDefault();
+			var nickname = document.getElementById("nickname").value;
+			var password = document.getElementById("password").value;
+			var firstName = document.getElementById("firstName").value;
+			var lastName = document.getElementById("lastName").value;
+			var dateOfBirth = document.getElementById("dateOfBirth").value;
+		}
+		$.ajax({
+    		//url: "http://localhost:8080/REST_users/users/addUser",
+			url: "http://localhost:8080/users/addUser/" + nickname + "/" + password + "/" + firstName + "/" + lastName + "/" + dateOfBirth,
+    		data: JSON.stringify({
+                "nickname" : nickname,
+                "password" : password,
+                "firstName" : firstName,
+                "lastName" : lastName,
+                "dateOfBirth" : dateOfBirth}),
+    		contentType: "application/json",
+    		type: "POST",
+    		dataType: "json"
+    	})
+    	.done (function() { alert('POST completed'); } )
+		.fail (function() { alert('POST failed'); } );
+	});*/
+    
+    
     
     
     var submit = document.querySelector('.btn');
@@ -118,7 +152,9 @@ document.addEventListener("DOMContentLoaded",function(){
 			var dateOfBirth = document.getElementById("dateOfBirth").value;
 		}
 		$.ajax({
-    		url: "http://localhost:8080/REST_users/users/addUser",
+			url: "http://localhost:8080/users/",
+			//url: "http://localhost:8080/users/addUser",
+			//url: "http://localhost:8080/users/addUser/" + nickname + "/" + password + "/" + firstName + "/" + lastName + "/" + dateOfBirth,
     		data: JSON.stringify({
                 "nickname" : nickname,
                 "password" : password,
